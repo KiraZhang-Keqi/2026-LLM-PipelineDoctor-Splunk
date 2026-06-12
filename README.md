@@ -8,6 +8,10 @@ Splunk and reasoning like an experienced data engineer. Built for the Splunk Age
 
 ## Track: Observability
 
+## Hackathon Submission
+
+Built for the Splunk Agentic Ops Hackathon 2026: https://splunk.devpost.com/
+
 ## Problem
 
 When a dashboard suddenly shows wrong numbers ("every product is out of stock"), the cause
