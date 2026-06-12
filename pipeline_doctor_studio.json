@@ -1,0 +1,1019 @@
+{
+    "title": "Pipeline Doctor — Data Observability",
+    "description": "On-call diagnostic view for data engineers: data quality, job performance, schema lineage and alerting across the inventory and revenue pipelines.",
+    "theme": "dark",
+    "visualizations": {
+        "header_title": {
+            "type": "splunk.markdown",
+            "options": {
+                "markdown": "# Pipeline Doctor — Data Observability\nOn-call view for data engineers. Inventory chain = red/amber (under investigation); revenue chain = green (healthy control). Use the filters above to scope by table, DQ status and alert severity.",
+                "fontColor": "#E8EDF4"
+            }
+        },
+        "kpi_dq_failures": {
+            "type": "splunk.singlevalue",
+            "title": "DQ Check Failures",
+            "dataSources": {
+                "primary": "ds_dq_failures"
+            },
+            "options": {
+                "majorColor": "#FFFFFF",
+                "backgroundColor": "> majorValue | rangeValue(kpiBadHigh)",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off"
+            },
+            "context": {
+                "kpiBadHigh": [
+                    {
+                        "to": 1,
+                        "value": "#118832"
+                    },
+                    {
+                        "from": 1,
+                        "to": 5,
+                        "value": "#CBA700"
+                    },
+                    {
+                        "from": 5,
+                        "value": "#D41F1F"
+                    }
+                ]
+            }
+        },
+        "kpi_active_alerts": {
+            "type": "splunk.singlevalue",
+            "title": "Active Alerts (Warning + Critical)",
+            "dataSources": {
+                "primary": "ds_active_alerts"
+            },
+            "options": {
+                "majorColor": "#FFFFFF",
+                "backgroundColor": "> majorValue | rangeValue(kpiBadHigh)",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off"
+            },
+            "context": {
+                "kpiBadHigh": [
+                    {
+                        "to": 1,
+                        "value": "#118832"
+                    },
+                    {
+                        "from": 1,
+                        "to": 3,
+                        "value": "#CBA700"
+                    },
+                    {
+                        "from": 3,
+                        "value": "#D41F1F"
+                    }
+                ]
+            }
+        },
+        "kpi_schema_changes": {
+            "type": "splunk.singlevalue",
+            "title": "Non-Baseline Schema Changes",
+            "dataSources": {
+                "primary": "ds_schema_changes"
+            },
+            "options": {
+                "majorColor": "#FFFFFF",
+                "backgroundColor": "> majorValue | rangeValue(kpiBadHigh)",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off"
+            },
+            "context": {
+                "kpiBadHigh": [
+                    {
+                        "to": 1,
+                        "value": "#118832"
+                    },
+                    {
+                        "from": 1,
+                        "value": "#D41F1F"
+                    }
+                ]
+            }
+        },
+        "kpi_job_success_radial": {
+            "type": "splunk.singlevalueradial",
+            "title": "Job Success Rate",
+            "dataSources": {
+                "primary": "ds_job_success"
+            },
+            "options": {
+                "unit": "%",
+                "unitPosition": "after",
+                "numberPrecision": 0.1,
+                "radialFillColor": "> majorValue | rangeValue(kpiGoodHigh)"
+            },
+            "context": {
+                "kpiGoodHigh": [
+                    {
+                        "to": 80,
+                        "value": "#D41F1F"
+                    },
+                    {
+                        "from": 80,
+                        "to": 95,
+                        "value": "#CBA700"
+                    },
+                    {
+                        "from": 95,
+                        "value": "#118832"
+                    }
+                ]
+            }
+        },
+        "kpi_null_fail": {
+            "type": "splunk.singlevalue",
+            "title": "Null Rate Failures — schema_change",
+            "dataSources": {
+                "primary": "ds_null_fail"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(failColorText)",
+                "backgroundColor": "#171D2B",
+                "underLabel": "Failing null_rate checks",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off"
+            },
+            "context": {
+                "failColorText": [
+                    {
+                        "to": 1,
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "from": 1,
+                        "value": "#FF6B66"
+                    }
+                ]
+            }
+        },
+        "kpi_rowcount_fail": {
+            "type": "splunk.singlevalue",
+            "title": "Row Count Failures — volume_drop",
+            "dataSources": {
+                "primary": "ds_rowcount_fail"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(failColorText)",
+                "backgroundColor": "#171D2B",
+                "underLabel": "Failing row_count checks",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off"
+            },
+            "context": {
+                "failColorText": [
+                    {
+                        "to": 1,
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "from": 1,
+                        "value": "#FF6B66"
+                    }
+                ]
+            }
+        },
+        "kpi_fresh_fail": {
+            "type": "splunk.singlevalue",
+            "title": "Freshness Failures — freshness_delay",
+            "dataSources": {
+                "primary": "ds_fresh_fail"
+            },
+            "options": {
+                "majorColor": "> majorValue | rangeValue(failColorText)",
+                "backgroundColor": "#171D2B",
+                "underLabel": "Failing freshness checks",
+                "sparklineDisplay": "off",
+                "trendDisplay": "off"
+            },
+            "context": {
+                "failColorText": [
+                    {
+                        "to": 1,
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "from": 1,
+                        "value": "#FF6B66"
+                    }
+                ]
+            }
+        },
+        "kpi_dq_trend": {
+            "type": "splunk.singlevalue",
+            "title": "DQ Failures — 5m trend",
+            "dataSources": {
+                "primary": "ds_dq_trend"
+            },
+            "options": {
+                "majorColor": "#FF6B66",
+                "backgroundColor": "#171D2B",
+                "sparklineDisplay": "after",
+                "trendDisplay": "absolute",
+                "underLabel": "Failures per 5-min bucket"
+            }
+        },
+        "section_dq": {
+            "type": "splunk.markdown",
+            "options": {
+                "markdown": "## Data Quality Dimensions\nEach scenario breaks exactly one dimension. The grey line marks the alerting threshold. Scoped by the Table / DQ Status filters.",
+                "fontColor": "#9AA7B8"
+            }
+        },
+        "chart_null_rate": {
+            "type": "splunk.line",
+            "title": "Null Rate by Table  ·  threshold 0.05",
+            "dataSources": {
+                "primary": "ds_null_rate"
+            },
+            "options": {
+                "legendDisplay": "bottom",
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Null Rate",
+                "yAxisAbbreviation": "auto",
+                "seriesColors": [
+                    "#FFC233",
+                    "#FF4D5E",
+                    "#8893A6"
+                ]
+            }
+        },
+        "chart_row_count": {
+            "type": "splunk.line",
+            "title": "Row Count by Table",
+            "dataSources": {
+                "primary": "ds_row_count"
+            },
+            "options": {
+                "legendDisplay": "bottom",
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Row Count",
+                "yAxisAbbreviation": "auto",
+                "seriesColors": [
+                    "#FFC233",
+                    "#FF4D5E"
+                ]
+            }
+        },
+        "chart_freshness": {
+            "type": "splunk.line",
+            "title": "Freshness Lag by Table  ·  SLA 20 min",
+            "dataSources": {
+                "primary": "ds_freshness"
+            },
+            "options": {
+                "legendDisplay": "bottom",
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Freshness Lag (min)",
+                "yAxisAbbreviation": "auto",
+                "seriesColors": [
+                    "#FFC233",
+                    "#FF4D5E",
+                    "#8893A6"
+                ]
+            }
+        },
+        "section_blast": {
+            "type": "splunk.markdown",
+            "options": {
+                "markdown": "## Blast Radius & Resource Profile\nThe failure is confined to the inventory chain; ingest duration stays flat, ruling out a resource problem.",
+                "fontColor": "#9AA7B8"
+            }
+        },
+        "chart_blast_radius": {
+            "type": "splunk.area",
+            "title": "Blast Radius — Inventory (affected) vs Revenue (healthy)",
+            "dataSources": {
+                "primary": "ds_blast_radius"
+            },
+            "options": {
+                "stackMode": "stacked",
+                "legendDisplay": "bottom",
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "DQ Failures",
+                "seriesColors": [
+                    "#FF4D5E",
+                    "#2ED98C"
+                ]
+            }
+        },
+        "chart_ingest_duration": {
+            "type": "splunk.line",
+            "title": "Ingest Job Duration — inventory vs orders",
+            "dataSources": {
+                "primary": "ds_ingest_duration"
+            },
+            "options": {
+                "legendDisplay": "bottom",
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Duration (ms)",
+                "yAxisAbbreviation": "auto",
+                "seriesColors": [
+                    "#FF4D5E",
+                    "#2ED98C"
+                ]
+            }
+        },
+        "section_detail": {
+            "type": "splunk.markdown",
+            "options": {
+                "markdown": "## Operational Detail\nJob runs, alert feed, schema registry and latest DQ check status for the inventory chain. Alert feed is scoped by the Alert Severity filter.",
+                "fontColor": "#9AA7B8"
+            }
+        },
+        "table_jobs": {
+            "type": "splunk.table",
+            "title": "Recent Job Runs — Inventory Chain",
+            "dataSources": {
+                "primary": "ds_jobs"
+            },
+            "options": {
+                "columnFormat": {
+                    "status": {
+                        "data": "> table | seriesByName('status') | matchValue(statusColor)"
+                    },
+                    "level": {
+                        "data": "> table | seriesByName('level') | matchValue(levelColor)"
+                    }
+                }
+            },
+            "context": {
+                "statusColor": [
+                    {
+                        "match": "success",
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "match": "warn",
+                        "value": "#F2C94C"
+                    },
+                    {
+                        "match": "fail",
+                        "value": "#FF6B66"
+                    },
+                    {
+                        "match": "error",
+                        "value": "#FF6B66"
+                    }
+                ],
+                "levelColor": [
+                    {
+                        "match": "INFO",
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "match": "WARN",
+                        "value": "#F2C94C"
+                    },
+                    {
+                        "match": "ERROR",
+                        "value": "#FF6B66"
+                    }
+                ]
+            }
+        },
+        "table_alerts": {
+            "type": "splunk.table",
+            "title": "Alert Feed",
+            "dataSources": {
+                "primary": "ds_alerts"
+            },
+            "options": {
+                "columnFormat": {
+                    "severity": {
+                        "data": "> table | seriesByName('severity') | matchValue(severityColor)"
+                    }
+                }
+            },
+            "context": {
+                "severityColor": [
+                    {
+                        "match": "info",
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "match": "warning",
+                        "value": "#F2C94C"
+                    },
+                    {
+                        "match": "critical",
+                        "value": "#FF6B66"
+                    }
+                ]
+            }
+        },
+        "table_schema": {
+            "type": "splunk.table",
+            "title": "Schema Registry — Recent Changes",
+            "dataSources": {
+                "primary": "ds_schema"
+            },
+            "options": {
+                "columnFormat": {
+                    "change_type": {
+                        "data": "> table | seriesByName('change_type') | matchValue(changeColor)"
+                    }
+                }
+            },
+            "context": {
+                "changeColor": [
+                    {
+                        "match": "baseline",
+                        "value": "#9AA7B8"
+                    },
+                    {
+                        "match": "rename_column",
+                        "value": "#FF6B66"
+                    },
+                    {
+                        "match": "drop_column",
+                        "value": "#FF6B66"
+                    },
+                    {
+                        "match": "add_column",
+                        "value": "#F2C94C"
+                    },
+                    {
+                        "match": "type_change",
+                        "value": "#F2C94C"
+                    }
+                ]
+            }
+        },
+        "table_dq_status": {
+            "type": "splunk.table",
+            "title": "Latest DQ Check Status — Inventory Chain",
+            "dataSources": {
+                "primary": "ds_dq_status"
+            },
+            "options": {
+                "columnFormat": {
+                    "status": {
+                        "data": "> table | seriesByName('status') | matchValue(statusColor)"
+                    }
+                }
+            },
+            "context": {
+                "statusColor": [
+                    {
+                        "match": "pass",
+                        "value": "#5CC05C"
+                    },
+                    {
+                        "match": "warn",
+                        "value": "#F2C94C"
+                    },
+                    {
+                        "match": "fail",
+                        "value": "#FF6B66"
+                    }
+                ]
+            }
+        },
+        "section_dist": {
+            "type": "splunk.markdown",
+            "options": {
+                "markdown": "## Failure Distribution & Job Performance\nWhich DQ dimension is failing, and whether jobs show any resource or throughput anomaly (a schema/contract break should show none).",
+                "fontColor": "#9AA7B8"
+            }
+        },
+        "viz_pie": {
+            "type": "splunk.pie",
+            "title": "DQ Failures by Check Type  (dominant slice = the broken dimension)",
+            "dataSources": {
+                "primary": "ds_pie"
+            },
+            "options": {
+                "legendDisplay": "right",
+                "seriesColors": [
+                    "#8893A6",
+                    "#FF4D5E",
+                    "#FFC233"
+                ]
+            }
+        },
+        "viz_bubble": {
+            "type": "splunk.bubble",
+            "title": "Job Resource Profile — duration vs CPU (bubble = runs)",
+            "dataSources": {
+                "primary": "ds_bubble"
+            },
+            "options": {
+                "legendDisplay": "bottom"
+            }
+        },
+        "viz_scatter": {
+            "type": "splunk.scatter",
+            "title": "Job Throughput — rows out vs duration (per run)",
+            "dataSources": {
+                "primary": "ds_scatter"
+            },
+            "options": {
+                "legendDisplay": "bottom",
+                "xAxisTitleText": "rows_out",
+                "yAxisTitleText": "duration_ms"
+            }
+        }
+    },
+    "dataSources": {
+        "ds_dq_failures": {
+            "type": "ds.search",
+            "name": "DQ Failures",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality status=fail | stats count as total_failures"
+            }
+        },
+        "ds_active_alerts": {
+            "type": "ds.search",
+            "name": "Active Alerts",
+            "options": {
+                "query": "index=main sourcetype=pipeline:alerts severity IN (warning, critical) | stats count as active_alerts"
+            }
+        },
+        "ds_schema_changes": {
+            "type": "ds.search",
+            "name": "Schema Changes",
+            "options": {
+                "query": "index=main sourcetype=pipeline:schema_registry change_type!=baseline | stats count as schema_changes"
+            }
+        },
+        "ds_job_success": {
+            "type": "ds.search",
+            "name": "Job Success Rate",
+            "options": {
+                "query": "index=main sourcetype=pipeline:job_log | stats count(eval(status=\"success\")) as ok count as total | eval pct=round(ok/total*100,1) | fields pct"
+            }
+        },
+        "ds_null_fail": {
+            "type": "ds.search",
+            "name": "Null Rate Failures",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality check_name=null_rate status=fail | stats count as failures"
+            }
+        },
+        "ds_rowcount_fail": {
+            "type": "ds.search",
+            "name": "Row Count Failures",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality check_name=row_count status=fail | stats count as failures"
+            }
+        },
+        "ds_fresh_fail": {
+            "type": "ds.search",
+            "name": "Freshness Failures",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality check_name=freshness_lag_min status=fail | stats count as failures"
+            }
+        },
+        "ds_dq_trend": {
+            "type": "ds.search",
+            "name": "DQ Failure Trend",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality status=fail | timechart span=5m count as failures"
+            }
+        },
+        "ds_null_rate": {
+            "type": "ds.search",
+            "name": "Null Rate by Table",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality check_name=null_rate table IN ($tbl_tok$) status=$status_tok$ | timechart span=5m avg(value) by table | eval Threshold=0.05"
+            }
+        },
+        "ds_row_count": {
+            "type": "ds.search",
+            "name": "Row Count by Table",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality check_name=row_count table IN ($tbl_tok$) status=$status_tok$ | timechart span=5m avg(value) by table"
+            }
+        },
+        "ds_freshness": {
+            "type": "ds.search",
+            "name": "Freshness Lag by Table",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality check_name=freshness_lag_min table IN ($tbl_tok$) status=$status_tok$ | timechart span=5m avg(value) by table | eval Threshold=20"
+            }
+        },
+        "ds_blast_radius": {
+            "type": "ds.search",
+            "name": "Blast Radius",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality status=fail | eval chain=case(table IN (\"raw.inventory_snapshot\",\"mart.product_availability\"), \"inventory\", table IN (\"raw.orders\",\"mart.daily_revenue\"), \"revenue\", 1=1, \"other\") | timechart span=5m count by chain"
+            }
+        },
+        "ds_ingest_duration": {
+            "type": "ds.search",
+            "name": "Ingest Job Duration",
+            "options": {
+                "query": "index=main sourcetype=pipeline:job_log job_name IN (ingest_inventory, ingest_orders) | timechart span=5m avg(duration_ms) by job_name"
+            }
+        },
+        "ds_jobs": {
+            "type": "ds.search",
+            "name": "Recent Job Runs",
+            "options": {
+                "query": "index=main sourcetype=pipeline:job_log job_name IN (ingest_inventory, transform_inventory, refresh_inventory_dashboard) | table _time job_name status level rows_in rows_out duration_ms worker_cpu_pct message | sort -_time | head 20"
+            }
+        },
+        "ds_alerts": {
+            "type": "ds.search",
+            "name": "Alert Feed",
+            "options": {
+                "query": "index=main sourcetype=pipeline:alerts severity=$sev_tok$ | table _time target severity alert_name description | sort -_time | head 20"
+            }
+        },
+        "ds_schema": {
+            "type": "ds.search",
+            "name": "Schema Registry",
+            "options": {
+                "query": "index=main sourcetype=pipeline:schema_registry | table _time table schema_version change_type old_field new_field migration_ticket | sort -_time | head 10"
+            }
+        },
+        "ds_dq_status": {
+            "type": "ds.search",
+            "name": "Latest DQ Check Status",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality table IN (\"raw.inventory_snapshot\",\"mart.product_availability\") | stats latest(value) as latest_value latest(threshold) as threshold latest(status) as status latest(_time) as last_check by table check_name | eval latest_value=round(latest_value,4), last_check=strftime(last_check,\"%F %T\") | sort table check_name"
+            }
+        },
+        "ds_pie": {
+            "type": "ds.search",
+            "name": "DQ Failures by Check Type",
+            "options": {
+                "query": "index=main sourcetype=pipeline:data_quality status=fail | stats count by check_name"
+            }
+        },
+        "ds_bubble": {
+            "type": "ds.search",
+            "name": "Job Resource Profile",
+            "options": {
+                "query": "index=main sourcetype=pipeline:job_log | stats avg(duration_ms) as avg_duration_ms avg(worker_cpu_pct) as avg_cpu_pct count as runs by job_name"
+            }
+        },
+        "ds_scatter": {
+            "type": "ds.search",
+            "name": "Job Throughput",
+            "options": {
+                "query": "index=main sourcetype=pipeline:job_log | table rows_out duration_ms job_name | head 200"
+            }
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        }
+    },
+    "inputs": {
+        "input_global_trp": {
+            "type": "input.timerange",
+            "title": "Time Range",
+            "options": {
+                "token": "global_time",
+                "defaultValue": "-24h@h,now"
+            }
+        },
+        "input_table": {
+            "type": "input.dropdown",
+            "title": "Table",
+            "options": {
+                "token": "tbl_tok",
+                "defaultValue": "raw.inventory_snapshot, mart.product_availability",
+                "items": [
+                    {
+                        "label": "Inventory: raw + mart",
+                        "value": "raw.inventory_snapshot, mart.product_availability"
+                    },
+                    {
+                        "label": "raw.inventory_snapshot",
+                        "value": "raw.inventory_snapshot"
+                    },
+                    {
+                        "label": "mart.product_availability",
+                        "value": "mart.product_availability"
+                    }
+                ]
+            }
+        },
+        "input_status": {
+            "type": "input.dropdown",
+            "title": "DQ Check Status",
+            "options": {
+                "token": "status_tok",
+                "defaultValue": "*",
+                "items": [
+                    {
+                        "label": "All",
+                        "value": "*"
+                    },
+                    {
+                        "label": "Fail only",
+                        "value": "fail"
+                    },
+                    {
+                        "label": "Pass only",
+                        "value": "pass"
+                    }
+                ]
+            }
+        },
+        "input_severity": {
+            "type": "input.dropdown",
+            "title": "Alert Severity",
+            "options": {
+                "token": "sev_tok",
+                "defaultValue": "*",
+                "items": [
+                    {
+                        "label": "All",
+                        "value": "*"
+                    },
+                    {
+                        "label": "Warning",
+                        "value": "warning"
+                    },
+                    {
+                        "label": "Critical",
+                        "value": "critical"
+                    }
+                ]
+            }
+        }
+    },
+    "layout": {
+        "type": "absolute",
+        "options": {
+            "width": 1440,
+            "height": 2528,
+            "display": "fit-to-width",
+            "backgroundColor": "#0E1420"
+        },
+        "structure": [
+            {
+                "item": "header_title",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 16,
+                    "w": 1400,
+                    "h": 64
+                }
+            },
+            {
+                "item": "kpi_dq_failures",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 96,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_active_alerts",
+                "type": "block",
+                "position": {
+                    "x": 374,
+                    "y": 96,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_schema_changes",
+                "type": "block",
+                "position": {
+                    "x": 728,
+                    "y": 96,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_job_success_radial",
+                "type": "block",
+                "position": {
+                    "x": 1082,
+                    "y": 96,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_null_fail",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 244,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_rowcount_fail",
+                "type": "block",
+                "position": {
+                    "x": 374,
+                    "y": 244,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_fresh_fail",
+                "type": "block",
+                "position": {
+                    "x": 728,
+                    "y": 244,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "kpi_dq_trend",
+                "type": "block",
+                "position": {
+                    "x": 1082,
+                    "y": 244,
+                    "w": 338,
+                    "h": 132
+                }
+            },
+            {
+                "item": "section_dq",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 392,
+                    "w": 1400,
+                    "h": 56
+                }
+            },
+            {
+                "item": "chart_null_rate",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 460,
+                    "w": 456,
+                    "h": 300
+                }
+            },
+            {
+                "item": "chart_row_count",
+                "type": "block",
+                "position": {
+                    "x": 492,
+                    "y": 460,
+                    "w": 456,
+                    "h": 300
+                }
+            },
+            {
+                "item": "chart_freshness",
+                "type": "block",
+                "position": {
+                    "x": 964,
+                    "y": 460,
+                    "w": 456,
+                    "h": 300
+                }
+            },
+            {
+                "item": "section_blast",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 776,
+                    "w": 1400,
+                    "h": 56
+                }
+            },
+            {
+                "item": "chart_blast_radius",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 844,
+                    "w": 692,
+                    "h": 300
+                }
+            },
+            {
+                "item": "chart_ingest_duration",
+                "type": "block",
+                "position": {
+                    "x": 728,
+                    "y": 844,
+                    "w": 692,
+                    "h": 300
+                }
+            },
+            {
+                "item": "section_detail",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 1568,
+                    "w": 1400,
+                    "h": 56
+                }
+            },
+            {
+                "item": "table_jobs",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 1636,
+                    "w": 1400,
+                    "h": 300
+                }
+            },
+            {
+                "item": "table_alerts",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 1952,
+                    "w": 1400,
+                    "h": 260
+                }
+            },
+            {
+                "item": "table_schema",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 2228,
+                    "w": 692,
+                    "h": 280
+                }
+            },
+            {
+                "item": "table_dq_status",
+                "type": "block",
+                "position": {
+                    "x": 728,
+                    "y": 2228,
+                    "w": 692,
+                    "h": 280
+                }
+            },
+            {
+                "item": "section_dist",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 1160,
+                    "w": 1400,
+                    "h": 56
+                }
+            },
+            {
+                "item": "viz_pie",
+                "type": "block",
+                "position": {
+                    "x": 20,
+                    "y": 1232,
+                    "w": 456,
+                    "h": 320
+                }
+            },
+            {
+                "item": "viz_bubble",
+                "type": "block",
+                "position": {
+                    "x": 492,
+                    "y": 1232,
+                    "w": 456,
+                    "h": 320
+                }
+            },
+            {
+                "item": "viz_scatter",
+                "type": "block",
+                "position": {
+                    "x": 964,
+                    "y": 1232,
+                    "w": 456,
+                    "h": 320
+                }
+            }
+        ],
+        "globalInputs": [
+            "input_global_trp",
+            "input_table",
+            "input_status",
+            "input_severity"
+        ]
+    }
+}

@@ -1,6 +1,19 @@
-﻿.env
+﻿# secrets / env
+.env
 *.env
+!.env.example
+
+# MCP / desktop config (may contain real credentials)
+mcp.json
+claude_desktop_config.json
+*.key
+*.pem
+
+# python
 __pycache__/
 *.pyc
 .venv/
 venv/
+
+# local agent output
+diagnosis_report_*.md

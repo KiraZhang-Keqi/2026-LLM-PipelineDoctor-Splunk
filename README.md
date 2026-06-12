@@ -1,4 +1,4 @@
-# 🩺 Pipeline Doctor
+# 🩺 Pipeline Doctor — Data Observability
 
 **AI-Powered Data Pipeline Fault Diagnosis Agent**
 

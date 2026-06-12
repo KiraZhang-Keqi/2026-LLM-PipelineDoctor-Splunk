@@ -1,4 +1,4 @@
-# Pipeline Doctor — Diagnostic Capability Rubric (L1–L4)
+# Pipeline Doctor — Data Observability: Diagnostic Capability Rubric (L1–L4)
 
 After the agent finishes a scenario, read its `DIAGNOSIS REPORT` and assign the **highest level it reaches** (L1/L2/L3/L4; record L0 if it fails L1). Levels are cumulative: to earn L4, the requirements of L1–L3 must also be met.
 

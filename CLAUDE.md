@@ -1,4 +1,4 @@
-# Pipeline Doctor — Project Context
+# Pipeline Doctor — Data Observability: Project Context
 
 ## What this project is
 AI-powered data pipeline fault diagnosis agent for the Splunk Agentic Ops Hackathon (Observability track). The agent queries Splunk and reasons like a data engineer to diagnose schema breaks, data-lineage problems, and data-quality regressions.
