@@ -1,0 +1,208 @@
+<dashboard version="1.1" theme="dark">
+  <label>Pipeline Doctor — Pipeline Health</label>
+  <description>Data pipeline observability: DQ metrics, job performance, schema changes, and alerts. Works with all scenarios (schema_change / volume_drop / freshness_delay).</description>
+<fieldset submitButton="false">
+  <input type="time" token="time">
+    <label>Time Range</label>
+    <default>
+      <earliest>0</earliest>
+      <latest></latest>
+    </default>
+  </input>
+</fieldset>
+
+  <!-- ============================================================ -->
+  <!-- ROW 1: STATUS OVERVIEW                                        -->
+  <!-- ============================================================ -->
+  <row>
+    <panel>
+      <title>🔴 DQ Failures</title>
+      <single>
+        <search>
+          <query>index=main sourcetype=pipeline:data_quality status=fail | stats dc(table) as tables_failing count as total_failures</query>
+        </search>
+        <option name="field">total_failures</option>
+        <option name="underLabel">DQ Check Failures</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[0,5]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <title>🚨 Active Alerts</title>
+      <single>
+        <search>
+          <query>index=main sourcetype=pipeline:alerts severity IN (warning, critical) | stats count</query>
+        </search>
+        <option name="underLabel">Warning + Critical Alerts</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[0,3]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <title>🔄 Schema Changes</title>
+      <single>
+        <search>
+          <query>index=main sourcetype=pipeline:schema_registry change_type!=baseline | stats count</query>
+        </search>
+        <option name="underLabel">Non-Baseline Changes</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0x53a051","0xf8be34","0xdc4e41"]</option>
+        <option name="rangeValues">[0,1]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+    <panel>
+      <title>✅ Job Success Rate</title>
+      <single>
+        <search>
+          <query>index=main sourcetype=pipeline:job_log | stats count(eval(status="success")) as ok count as total | eval pct=round(ok/total*100,1) | fields pct</query>
+        </search>
+        <option name="field">pct</option>
+        <option name="underLabel">% Jobs Succeeded</option>
+        <option name="unit">%</option>
+        <option name="colorMode">block</option>
+        <option name="rangeColors">["0xdc4e41","0xf8be34","0x53a051"]</option>
+        <option name="rangeValues">[80,95]</option>
+        <option name="useColors">1</option>
+      </single>
+    </panel>
+  </row>
+
+  <!-- ============================================================ -->
+  <!-- ROW 2: THE THREE DQ DIMENSIONS (core diagnostic view)        -->
+  <!-- ============================================================ -->
+  <row>
+    <panel>
+      <title>📊 Null Rate by Table (column avg)</title>
+      <chart>
+        <search>
+          <query>index=main sourcetype=pipeline:data_quality check_name=null_rate table IN (raw.inventory_snapshot, mart.product_availability) | timechart span=5m avg(value) by table</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Null Rate</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.showMarkers">1</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>📊 Row Count by Table</title>
+      <chart>
+        <search>
+          <query>index=main sourcetype=pipeline:data_quality check_name=row_count table IN (raw.inventory_snapshot, mart.product_availability) | timechart span=5m avg(value) by table</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Row Count</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.showMarkers">1</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>📊 Freshness Lag by Table (min)</title>
+      <chart>
+        <search>
+          <query>index=main sourcetype=pipeline:data_quality check_name=freshness_lag_min table IN (raw.inventory_snapshot, mart.product_availability) | timechart span=5m avg(value) by table</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Freshness Lag (min)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.showMarkers">1</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- ============================================================ -->
+  <!-- ROW 3: INVENTORY vs REVENUE (blast radius comparison)        -->
+  <!-- ============================================================ -->
+  <row>
+    <panel>
+      <title>🔀 Inventory Chain vs Revenue Chain — DQ Failures</title>
+      <chart>
+        <search>
+          <query>index=main sourcetype=pipeline:data_quality status=fail
+| eval chain=case(
+    table IN ("raw.inventory_snapshot","mart.product_availability"), "inventory",
+    table IN ("raw.orders","mart.daily_revenue"), "revenue",
+    1=1, "other")
+| timechart span=5m count by chain</query>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.stackMode">stacked</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">DQ Failures</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>⏱️ Ingest Job Duration (inventory vs orders)</title>
+      <chart>
+        <search>
+          <query>index=main sourcetype=pipeline:job_log job_name IN (ingest_inventory, ingest_orders) | timechart span=5m avg(duration_ms) by job_name</query>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.axisTitleX.text">Time</option>
+        <option name="charting.axisTitleY.text">Duration (ms)</option>
+        <option name="charting.legend.placement">bottom</option>
+        <option name="charting.chart.showMarkers">1</option>
+      </chart>
+    </panel>
+  </row>
+
+  <!-- ============================================================ -->
+  <!-- ROW 4: JOB DETAILS + ALERTS FEED                            -->
+  <!-- ============================================================ -->
+  <row>
+    <panel>
+      <title>📋 Recent Job Runs (Inventory Chain)</title>
+      <table>
+        <search>
+          <query>index=main sourcetype=pipeline:job_log job_name IN (ingest_inventory, transform_inventory, refresh_inventory_dashboard) | table _time job_name status level rows_in rows_out duration_ms worker_cpu_pct message | sort -_time | head 20</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="wrap">1</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>🚨 Alert Feed</title>
+      <table>
+        <search>
+          <query>index=main sourcetype=pipeline:alerts | table _time target severity alert_name description | sort -_time | head 20</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="wrap">1</option>
+      </table>
+    </panel>
+  </row>
+
+  <!-- ============================================================ -->
+  <!-- ROW 5: SCHEMA REGISTRY                                       -->
+  <!-- ============================================================ -->
+  <row>
+    <panel>
+      <title>📝 Schema Registry — Recent Changes</title>
+      <table>
+        <search>
+          <query>index=main sourcetype=pipeline:schema_registry | table _time table schema_version change_type old_field new_field migration_ticket | sort -_time | head 10</query>
+        </search>
+        <option name="count">10</option>
+        <option name="drilldown">none</option>
+        <option name="wrap">1</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>

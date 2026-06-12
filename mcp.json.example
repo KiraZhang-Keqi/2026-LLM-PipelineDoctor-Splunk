@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "splunk-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://YOUR_SPLUNK_HOST:8089/services/mcp",
+        "--header",
+        "Authorization: Bearer YOUR_MCP_TOKEN"
+      ],
+      "env": {
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+      }
+    }
+  }
+}

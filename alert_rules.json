@@ -1,0 +1,45 @@
+{
+  "_comment": "Pipeline Doctor - preventive Splunk alert templates. Each rule maps 1:1 to one fault scenario, because each scenario breaks exactly one DQ dimension (null_rate / row_count / freshness_lag_min) on the inventory chain. Thresholds mirror generate_data.py (null_rate>0.05, row_count<base*0.7, freshness_lag_min>20). Edit `search`, `cron_schedule`, or `severity` here; generate_alerts.py pushes whatever is in this file.",
+  "app": "search",
+  "alerts": [
+    {
+      "name": "PipelineDoctor - Inventory null_rate breach (schema_change)",
+      "scenario": "schema_change",
+      "description": "Fires when a null_rate DQ check fails on the inventory chain. Catches an un-propagated source column rename (e.g. stock_count -> available_qty) before the dashboard goes wrong.",
+      "search": "index=main sourcetype=pipeline:data_quality check_name=null_rate status=fail (table=\"raw.inventory_snapshot\" OR table=\"mart.product_availability\") | stats max(value) as max_null_rate latest(threshold) as threshold values(column) as affected_columns by table",
+      "cron_schedule": "*/5 * * * *",
+      "earliest_time": "-30m",
+      "latest_time": "now",
+      "alert_comparator": "greater than",
+      "alert_threshold": "0",
+      "severity": 4,
+      "disabled": false
+    },
+    {
+      "name": "PipelineDoctor - Inventory row_count collapse (volume_drop)",
+      "scenario": "volume_drop",
+      "description": "Fires when a row_count DQ check fails on the inventory chain. Catches a partial source extraction where the ingest job still reports success (WARN, not fail).",
+      "search": "index=main sourcetype=pipeline:data_quality check_name=row_count status=fail (table=\"raw.inventory_snapshot\" OR table=\"mart.product_availability\") | stats latest(value) as row_count latest(threshold) as min_expected_rows by table",
+      "cron_schedule": "*/5 * * * *",
+      "earliest_time": "-30m",
+      "latest_time": "now",
+      "alert_comparator": "greater than",
+      "alert_threshold": "0",
+      "severity": 4,
+      "disabled": false
+    },
+    {
+      "name": "PipelineDoctor - Inventory freshness SLA breach (freshness_delay)",
+      "scenario": "freshness_delay",
+      "description": "Fires when a freshness_lag_min DQ check fails on the inventory chain. Catches a stalled source query so you are alerted before business users notice a stale dashboard.",
+      "search": "index=main sourcetype=pipeline:data_quality check_name=freshness_lag_min status=fail (table=\"raw.inventory_snapshot\" OR table=\"mart.product_availability\") | stats max(value) as max_lag_min latest(threshold) as threshold_min by table",
+      "cron_schedule": "*/5 * * * *",
+      "earliest_time": "-30m",
+      "latest_time": "now",
+      "alert_comparator": "greater than",
+      "alert_threshold": "0",
+      "severity": 4,
+      "disabled": false
+    }
+  ]
+}

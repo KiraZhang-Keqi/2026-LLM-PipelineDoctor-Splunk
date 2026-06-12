@@ -1,0 +1,179 @@
+<svg viewBox="0 0 1180 860" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, system-ui, sans-serif">
+  <defs>
+    <filter id="shadow" x="-6%" y="-6%" width="112%" height="112%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.15"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#475569"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2563eb"/>
+    </marker>
+  </defs>
+
+  <!-- background -->
+  <rect x="0" y="0" width="1180" height="860" fill="#f8fafc"/>
+
+  <!-- title -->
+  <text x="40" y="46" font-size="26" font-weight="700" fill="#0f172a">🩺 Pipeline Doctor — Architecture</text>
+  <text x="40" y="72" font-size="15" fill="#475569">AI-Powered Data Pipeline Fault Diagnosis Agent · Splunk Agentic Ops Hackathon · Observability track</text>
+
+  <!-- ============ ZONE 1: AI / AGENT INTEGRATION ============ -->
+  <rect x="40" y="100" width="520" height="330" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="60" y="128" font-size="13" font-weight="700" fill="#1d4ed8" letter-spacing="1">① AI / AGENT INTEGRATION</text>
+
+  <!-- user input -->
+  <rect x="60" y="146" width="200" height="64" rx="8" fill="#ffffff" stroke="#cbd5e1" filter="url(#shadow)"/>
+  <text x="160" y="172" font-size="14" font-weight="600" fill="#0f172a" text-anchor="middle">👤 User Input</text>
+  <text x="160" y="193" font-size="11" fill="#64748b" text-anchor="middle">"Inventory dashboard shows</text>
+  <text x="160" y="206" font-size="11" fill="#64748b" text-anchor="middle">all products out of stock"</text>
+
+  <!-- agent loop box -->
+  <rect x="60" y="240" width="240" height="170" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+  <text x="180" y="266" font-size="14" font-weight="700" fill="#1d4ed8" text-anchor="middle">🤖 Agent Loop (agent.py)</text>
+  <text x="78" y="292" font-size="12" fill="#334155">1. Locate the failing symptom</text>
+  <text x="78" y="313" font-size="12" fill="#334155">2. Rule out resource / volume</text>
+  <text x="78" y="334" font-size="12" fill="#334155">3. Walk lineage upstream</text>
+  <text x="78" y="355" font-size="12" fill="#334155">4. Find the exact field change</text>
+  <text x="78" y="376" font-size="12" fill="#334155">5. Output diagnosis report</text>
+  <text x="180" y="398" font-size="11" font-style="italic" fill="#2563eb" text-anchor="middle">↻ loop until confident</text>
+
+  <!-- Claude API -->
+  <rect x="330" y="240" width="200" height="80" rx="10" fill="#ffffff" stroke="#cbd5e1" filter="url(#shadow)"/>
+  <text x="430" y="270" font-size="14" font-weight="700" fill="#0f172a" text-anchor="middle">🧠 Claude API</text>
+  <text x="430" y="292" font-size="11" fill="#64748b" text-anchor="middle">LLM reasoning +</text>
+  <text x="430" y="306" font-size="11" fill="#64748b" text-anchor="middle">tool-use / function calling</text>
+
+  <!-- report -->
+  <rect x="330" y="338" width="200" height="72" rx="10" fill="#ecfdf5" stroke="#6ee7b7" filter="url(#shadow)"/>
+  <text x="430" y="366" font-size="14" font-weight="700" fill="#047857" text-anchor="middle">📋 Diagnosis Report</text>
+  <text x="430" y="388" font-size="11" fill="#059669" text-anchor="middle">root cause + evidence +</text>
+  <text x="430" y="401" font-size="11" fill="#059669" text-anchor="middle">remediation + confidence</text>
+
+  <!-- arrows zone1 -->
+  <line x1="160" y1="210" x2="160" y2="238" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="300" y1="280" x2="328" y2="280" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="314" y="272" font-size="10" fill="#2563eb" text-anchor="middle">prompt</text>
+  <line x1="430" y1="320" x2="430" y2="336" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M328,300 Q300,330 302,360 L298,360" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="330" y="332" font-size="10" fill="#2563eb">tool calls</text>
+
+  <!-- ============ ZONE 2: APP <-> SPLUNK ============ -->
+  <rect x="600" y="100" width="540" height="330" rx="12" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5"/>
+  <text x="620" y="128" font-size="13" font-weight="700" fill="#c2410c" letter-spacing="1">② APP ↔ SPLUNK INTERACTION</text>
+
+  <!-- REST API connector -->
+  <rect x="620" y="150" width="220" height="68" rx="8" fill="#ffffff" stroke="#cbd5e1" filter="url(#shadow)"/>
+  <text x="730" y="178" font-size="13" font-weight="700" fill="#0f172a" text-anchor="middle">Splunk REST API</text>
+  <text x="730" y="199" font-size="11" fill="#64748b" text-anchor="middle">:8089/services/search · SPL queries</text>
+
+  <!-- Splunk Enterprise -->
+  <rect x="620" y="240" width="500" height="170" rx="10" fill="#ffffff" stroke="#f97316" stroke-width="2" filter="url(#shadow)"/>
+  <text x="640" y="268" font-size="15" font-weight="700" fill="#0f172a">🗄️ Splunk Enterprise · index=main</text>
+  <text x="640" y="288" font-size="11" fill="#64748b">5 pipeline sourcetypes queried by the agent:</text>
+
+  <!-- 5 sourcetypes -->
+  <rect x="640" y="300" width="220" height="30" rx="6" fill="#fef3c7" stroke="#fde68a"/>
+  <text x="650" y="320" font-size="11.5" fill="#92400e">pipeline:job_log</text>
+  <rect x="876" y="300" width="226" height="30" rx="6" fill="#fef3c7" stroke="#fde68a"/>
+  <text x="886" y="320" font-size="11.5" fill="#92400e">pipeline:schema_registry</text>
+
+  <rect x="640" y="338" width="220" height="30" rx="6" fill="#fef3c7" stroke="#fde68a"/>
+  <text x="650" y="358" font-size="11.5" fill="#92400e">pipeline:data_quality</text>
+  <rect x="876" y="338" width="226" height="30" rx="6" fill="#fef3c7" stroke="#fde68a"/>
+  <text x="886" y="358" font-size="11.5" fill="#92400e">pipeline:lineage</text>
+
+  <rect x="640" y="376" width="220" height="30" rx="6" fill="#fef3c7" stroke="#fde68a"/>
+  <text x="650" y="396" font-size="11.5" fill="#92400e">pipeline:alerts</text>
+  <text x="886" y="396" font-size="11" font-style="italic" fill="#9a3412">null_rate · row_count · freshness_lag</text>
+
+  <!-- arrows between agent and splunk -->
+  <line x1="530" y1="270" x2="618" y2="180" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="560" y="212" font-size="10" fill="#2563eb">SPL query</text>
+  <line x1="618" y1="200" x2="532" y2="290" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="556" y="262" font-size="10" fill="#475569">results (JSON)</text>
+  <line x1="730" y1="218" x2="730" y2="238" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ============ ZONE 3: DATA FLOW / LINEAGE ============ -->
+  <rect x="40" y="460" width="1100" height="360" rx="12" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="60" y="488" font-size="13" font-weight="700" fill="#334155" letter-spacing="1">③ DATA FLOW — SIMULATED PIPELINE &amp; INGESTION</text>
+
+  <!-- ingestion -->
+  <rect x="60" y="506" width="250" height="66" rx="8" fill="#ffffff" stroke="#cbd5e1" filter="url(#shadow)"/>
+  <text x="185" y="532" font-size="13" font-weight="700" fill="#0f172a" text-anchor="middle">📥 generate_data.py</text>
+  <text x="185" y="553" font-size="11" fill="#64748b" text-anchor="middle">simulates 3 fault scenarios</text>
+  <text x="185" y="566" font-size="10.5" fill="#94a3b8" text-anchor="middle">schema_change · volume_drop · freshness_delay</text>
+
+  <rect x="350" y="506" width="200" height="66" rx="8" fill="#ffffff" stroke="#cbd5e1" filter="url(#shadow)"/>
+  <text x="450" y="538" font-size="13" font-weight="700" fill="#0f172a" text-anchor="middle">HTTP Event</text>
+  <text x="450" y="556" font-size="12" fill="#64748b" text-anchor="middle">Collector (HEC) :8088</text>
+
+  <line x1="310" y1="539" x2="348" y2="539" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="550" y1="539" x2="600" y2="539" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="575" y="531" font-size="10" fill="#475569" text-anchor="middle">ingest</text>
+  <rect x="602" y="508" width="180" height="62" rx="8" fill="#fff7ed" stroke="#f97316"/>
+  <text x="692" y="535" font-size="12" font-weight="700" fill="#c2410c" text-anchor="middle">Splunk index=main</text>
+  <text x="692" y="554" font-size="10.5" fill="#9a3412" text-anchor="middle">~4,400 events / run</text>
+
+  <!-- AFFECTED chain -->
+  <text x="60" y="606" font-size="12" font-weight="700" fill="#b91c1c">⚠ AFFECTED chain (inventory):</text>
+  <g font-size="10.5" fill="#7f1d1d">
+    <rect x="60" y="616" width="150" height="40" rx="6" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="135" y="633" text-anchor="middle">source.orders_db</text>
+    <text x="135" y="647" text-anchor="middle">.inventory</text>
+
+    <rect x="262" y="616" width="160" height="40" rx="6" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="342" y="633" text-anchor="middle">raw.inventory</text>
+    <text x="342" y="647" text-anchor="middle">_snapshot</text>
+
+    <rect x="474" y="616" width="160" height="40" rx="6" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="554" y="633" text-anchor="middle">mart.product</text>
+    <text x="554" y="647" text-anchor="middle">_availability</text>
+
+    <rect x="686" y="616" width="160" height="40" rx="6" fill="#fee2e2" stroke="#fca5a5"/>
+    <text x="766" y="633" text-anchor="middle">dashboard</text>
+    <text x="766" y="647" text-anchor="middle">.inventory_health</text>
+  </g>
+  <line x1="210" y1="636" x2="260" y2="636" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="422" y1="636" x2="472" y2="636" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="634" y1="636" x2="684" y2="636" stroke="#b91c1c" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="235" y="630" font-size="8.5" fill="#991b1b" text-anchor="middle">ingest</text>
+  <text x="447" y="630" font-size="8.5" fill="#991b1b" text-anchor="middle">transform</text>
+  <text x="659" y="630" font-size="8.5" fill="#991b1b" text-anchor="middle">refresh</text>
+
+  <rect x="880" y="612" width="230" height="48" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-dasharray="4 3"/>
+  <text x="995" y="631" font-size="11" font-weight="700" fill="#b91c1c" text-anchor="middle">ROOT CAUSE</text>
+  <text x="995" y="649" font-size="10" fill="#7f1d1d" text-anchor="middle">stock_count → available_qty (rename)</text>
+
+  <!-- HEALTHY chain -->
+  <text x="60" y="694" font-size="12" font-weight="700" fill="#047857">✅ HEALTHY chain (revenue — confirms blast radius is confined):</text>
+  <g font-size="10.5" fill="#065f46">
+    <rect x="60" y="704" width="150" height="38" rx="6" fill="#d1fae5" stroke="#6ee7b7"/>
+    <text x="135" y="721" text-anchor="middle">source.orders_db</text>
+    <text x="135" y="735" text-anchor="middle">.orders</text>
+
+    <rect x="262" y="704" width="160" height="38" rx="6" fill="#d1fae5" stroke="#6ee7b7"/>
+    <text x="342" y="727" text-anchor="middle">raw.orders</text>
+
+    <rect x="474" y="704" width="160" height="38" rx="6" fill="#d1fae5" stroke="#6ee7b7"/>
+    <text x="554" y="721" text-anchor="middle">mart.daily</text>
+    <text x="554" y="735" text-anchor="middle">_revenue</text>
+
+    <rect x="686" y="704" width="160" height="38" rx="6" fill="#d1fae5" stroke="#6ee7b7"/>
+    <text x="766" y="721" text-anchor="middle">dashboard</text>
+    <text x="766" y="735" text-anchor="middle">.revenue_overview</text>
+  </g>
+  <line x1="210" y1="723" x2="260" y2="723" stroke="#047857" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="422" y1="723" x2="472" y2="723" stroke="#047857" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="634" y1="723" x2="684" y2="723" stroke="#047857" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- validation footnote -->
+  <rect x="60" y="762" width="1050" height="42" rx="8" fill="#eef2ff" stroke="#c7d2fe"/>
+  <text x="80" y="782" font-size="12" font-weight="700" fill="#3730a3">Reliability:</text>
+  <text x="150" y="782" font-size="12" fill="#3730a3">15-run validation (3 scenarios × 5) → 15/15 reached L4 (exact root cause + evidence + remediation). See validation_runs/scores.csv</text>
+  <text x="80" y="797" font-size="11" fill="#6366f1">Diagnostic principle: lineage-first, not resource-first — normal row_count/duration/CPU + a column-level signal ⇒ schema break, not an outage.</text>
+
+  <!-- data flow arrow connecting ingestion zone to splunk zone (conceptual) -->
+  <line x1="692" y1="508" x2="730" y2="412" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+  <text x="745" y="460" font-size="10" fill="#94a3b8">same index</text>
+</svg>

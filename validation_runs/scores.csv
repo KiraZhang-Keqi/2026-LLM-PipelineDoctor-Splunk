@@ -1,0 +1,16 @@
+﻿scenario,run,report_file,level,class_correct,mixed_other_scenario,notes
+schema_change,1,validation_runs\schema_change_run1.txt,L4,yes,no,Root cause = column rename stock_count->available_qty (DATA-1847); null_rate fingerprint; explicitly rules out volume drop and stall
+schema_change,2,validation_runs\schema_change_run2.txt,L4,yes,no,Same; complete evidence table; rules out resource/volume/scheduling
+schema_change,3,validation_runs\schema_change_run3.txt,L4,yes,no,Clear null_rate timeline table; rules out resource cause
+schema_change,4,validation_runs\schema_change_run4.txt,L4,yes,no,Clean
+schema_change,5,validation_runs\schema_change_run5.txt,L4,yes,no,Root cause correct; lineage table places WARN awkwardly (at 01:02 not 00:35) but does not change main cause; no deduction
+volume_drop,1,validation_runs\volume_drop_run1.txt,L4,yes,no,Root cause = source returns ~1247 rows (expected ~12000); explicitly NOT a schema break
+volume_drop,2,validation_runs\volume_drop_run2.txt,L4,yes,no,"Schema registry zero events, null clean; rules out schema"
+volume_drop,3,validation_runs\volume_drop_run3.txt,L4,yes,no,"Class correct; speculates on source-side mechanism with explicit labeling and lowered confidence (85%/65%) - honest, no deduction"
+volume_drop,4,validation_runs\volume_drop_run4.txt,L4,yes,no,Clean
+volume_drop,5,validation_runs\volume_drop_run5.txt,L4,yes,no,Clean
+freshness_delay,1,validation_runs\freshness_delay_run1.txt,L4,yes,no,Root cause = slow source read; row_count normal -> explicitly rules out volume drop
+freshness_delay,2,validation_runs\freshness_delay_run2.txt,L4,yes,no,duration 45s->780s; rules out volume/schema
+freshness_delay,3,validation_runs\freshness_delay_run3.txt,L4,yes,no,"Captures precise stall mechanism: status=running, rows_in/out=0"
+freshness_delay,4,validation_runs\freshness_delay_run4.txt,L4,yes,no,Same; peak duration 895s
+freshness_delay,5,validation_runs\freshness_delay_run5.txt,L4,yes,no,Clean
