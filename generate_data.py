@@ -946,7 +946,7 @@ def main():
     SPLUNK_HEC_URL = f"https://{args.host}:{args.port}/services/collector/event"
     SPLUNK_HEC_TOKEN = args.token
 
-    base_time = datetime.utcnow() - timedelta(minutes=60)
+    base_time = datetime.now() - timedelta(minutes=60)
 
     print("=" * 60)
     print("Pipeline Doctor - Data Pipeline Fault Simulator")
